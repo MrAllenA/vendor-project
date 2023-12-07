@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view
 
 @api_view(['POST'])
 def vendor_create(request):
-
-    
-    return HttpResponse("runninggg...")
+    username = request.POST.get('vendor',None)
+    if not username:
+        return Response("No vendor name given",status=406)
+    return Response(username,status=200)
