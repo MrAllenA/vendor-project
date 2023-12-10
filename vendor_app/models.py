@@ -1,4 +1,6 @@
+from collections.abc import Iterable
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 from django.contrib.auth.models import BaseUserManager,AbstractBaseUser, PermissionsMixin
@@ -49,19 +51,19 @@ class Vendor(models.Model):
         return self.vendor_code
     
 class PurchaseOrder(models.Model):
-    po_number = models.CharField(max_length=50, unique=True)
-    vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
+    po_number = models.CharField(max_length=50,null=False,blank=True, unique=True)
+    vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE,related_name="purchaseorders",null=True,blank=True)
     order_date = models.DateTimeField(auto_now=True)
-    delivery_date = models.DateTimeField()
-    items = models.JSONField()
-    quantity = models.IntegerField()
-    status = models.CharField(max_length=50)
+    delivery_date = models.DateTimeField(null=True,blank=True)
+    items = models.JSONField(null=False,blank=True)
+    quantity = models.IntegerField(null=False,blank=True)
+    status = models.CharField(max_length=50,default="pending",null=False,blank=True)
     quality_rating = models.FloatField(null=True, blank=True)
-    issue_date = models.DateTimeField()
+    issue_date = models.DateTimeField(null=True,blank=True)
     acknowledgment_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"Purchase Order {self.po_number} - {self.vendor.vendor_name}"
+        return f"Purchase Order {self.po_number}"
     
 class HistoricalPerformance(models.Model):
     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
