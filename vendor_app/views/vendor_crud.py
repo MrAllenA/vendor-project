@@ -32,7 +32,12 @@ def vendor_create(request,pk=None):
                 if vendor_confirm:
                     user = Token.objects.create(user=vendor)
                     token = user.key
-                    return Response(token,status=201)
+                    content ={
+                        "token": token,
+                        "vendor_code": vendor_confirm.vendor_code,
+                        "vendor id": vendor_confirm.id
+                    }
+                    return Response(content,status=201)
             else:
                 return Response("username already exists",status=406)
 
