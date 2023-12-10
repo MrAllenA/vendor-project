@@ -36,8 +36,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class Vendor(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE,null=True,blank=True,related_name='vendor_user')
-    vendor_code = models.CharField(null=False,unique=True)
-    name = models.CharField(max_length=255,null=False)
+    vendor_code = models.CharField(null=False,blank=True,unique=True)
+    name = models.CharField(max_length=255,null=False,blank=True)
     contact_details = models.TextField(null=True,blank=True)
     address = models.TextField(null=True,blank=True)
     on_time_delivery_rate = models.FloatField(null=True,blank=True)
