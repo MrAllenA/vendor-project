@@ -8,16 +8,19 @@ from rest_framework.authtoken.models import Token
 from vendor_app.models import CustomUser,Vendor
 from ..serializers.vendor_serializer import VendorSerializer
 from django.shortcuts import get_object_or_404
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 
+@swagger_auto_schema(method='POST',request_body=openapi.Schema(type=openapi.TYPE_OBJECT,properties={'vendor':openapi.Schema(type=openapi.TYPE_STRING),'contact_details':openapi.Schema(type=openapi.TYPE_STRING),'address':openapi.Schema(type=openapi.TYPE_STRING),},required=['vendor']),  consumes=['application/json'],)
 @api_view(['POST','GET'])
 @authentication_classes([])
 @permission_classes([])
 def vendor_create(request,pk=None):
     if request.method =='POST':
-        username = request.POST.get('vendor',None)
-        contact_details = request.POST.get('contact_details',None)
-        address = request.POST.get('address',None)
+        username = request.data.get('vendor', None)
+        contact_details = request.data.get('contact_details', None)
+        address = request.data.get('address', None)
         if not username:
             return Response("No vendor name given",status=406)
         try:

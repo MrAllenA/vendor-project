@@ -7,3 +7,7 @@ class PurchaseOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = PurchaseOrder
         fields = '__all__'
+class PurchaseOrderUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PurchaseOrder
+        fields = ['delivery_date','items','quantity']

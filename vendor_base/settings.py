@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
-
+    'rest_framework_swagger',
+    'drf_yasg',
     'vendor_app'
 ]
 
@@ -116,6 +117,20 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.MultiPartParser'
 
     ]
+}
+
+SWAGGER_SETTINGS ={
+    'SECURITY_DEFINITIONS':{
+        'Token Auth':{
+            'type':'apiKey',
+            'name':'Authorization',
+            'in':'header'
+
+        }
+
+    }
+
+
 }
 
 # Password validation

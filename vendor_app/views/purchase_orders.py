@@ -7,11 +7,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 from vendor_app.models import CustomUser,Vendor,PurchaseOrder
 from ..serializers.vendor_serializer import VendorSerializer
-from ..serializers.purchase_order_serializer import PurchaseOrderSerializer
+from ..serializers.purchase_order_serializer import PurchaseOrderSerializer, PurchaseOrderUpdateSerializer
 from rest_framework.decorators import api_view,permission_classes,authentication_classes
 from django.shortcuts import get_object_or_404
 from django.db import models
-
+from datetime import datetime
 
 @api_view(['POST','GET'])
 @authentication_classes([])
@@ -23,7 +23,16 @@ def purchase_order_create(request,pk=None):
         data["po_number"] = custom_po_number
         # Set the vendor based on the logic you've used before
         vendor = Vendor.objects.annotate(num_orders=models.Count('purchaseorders')).order_by('num_orders').first()
-        data['vendor'] = vendor.id  
+        data['vendor'] = vendor.id 
+
+        data['issue_date'] =  datetime.today() 
+
+        delivery_date_str = data.get('delivery_date')  # Assuming 'delivery_date' is the field name
+        delivery_date = datetime.strptime(delivery_date_str, '%Y-%m-%d').date()
+
+        if delivery_date < datetime.today().date():
+            return Response({"error": "Delivery date must be equal to or greater than today."}, status=400)
+        
         serializer = PurchaseOrderSerializer(data=data)
         if serializer.is_valid():
             # Save the data to create a new PurchaseOrder instance
@@ -31,6 +40,8 @@ def purchase_order_create(request,pk=None):
 
             # Return the serialized data with a 201 status code
             serialized_data = PurchaseOrderSerializer(purchase_order_instance).data
+
+            return Response(serialized_data,status=201)
 
     if request.method == "GET":
         if pk:
@@ -40,8 +51,34 @@ def purchase_order_create(request,pk=None):
         else:
             orders = PurchaseOrder.objects.all()
             serializer = PurchaseOrderSerializer(orders,many=True)
+        return Response(serializer.data,status=200) 
+
+@api_view(['GET','PUT','DELETE'])
+@authentication_classes([])
+@permission_classes([])
+def purchase_order_details(request,pk):
+    if request.method == 'GET':
+        order = get_object_or_404(PurchaseOrder,id=pk)
+        serializer= PurchaseOrderSerializer(order)
         return Response(serializer.data,status=200)
 
 
-
+    if request.method == 'PUT':
+        order = get_object_or_404(PurchaseOrder, id=pk)
+        serializer = PurchaseOrderUpdateSerializer(order, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=200)
+        return Response(serializer.errors, status=400)
     
+    if request.method == 'DELETE':
+        order = get_object_or_404(PurchaseOrder, id=pk)
+        order.delete()
+        return Response("Purchase Order deleted successfully", status=204)
+
+@api_view(['POST'])
+@authentication_classes([])
+@permission_classes([])
+def purchase_order_acknoweldgement(request,pk):
+
+    pass
