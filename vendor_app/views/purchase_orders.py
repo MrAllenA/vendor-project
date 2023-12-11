@@ -77,8 +77,16 @@ def purchase_order_details(request,pk):
         return Response("Purchase Order deleted successfully", status=204)
 
 @api_view(['POST'])
-@authentication_classes([])
-@permission_classes([])
+@permission_classes([IsAuthenticated])
 def purchase_order_acknoweldgement(request,pk):
+    user_instance = request.user
+    vendor = get_object_or_404(Vendor,user=user_instance)
+    order = get_object_or_404(PurchaseOrder,id=pk,vendor=vendor)
+    if not order:
+        return Response("Purchase order doesnt exist",status=404)
+    order.acknowledgment_date = datetime.today()
+    order.save()
+    serializer = PurchaseOrderSerializer(order)
+    return Response(serializer.data,status=201)
 
-    pass
+
