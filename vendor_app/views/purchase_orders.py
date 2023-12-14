@@ -12,9 +12,10 @@ from rest_framework.decorators import api_view,permission_classes,authentication
 from django.shortcuts import get_object_or_404
 from django.db import models
 from datetime import datetime
+from django.utils import timezone
+
 
 @api_view(['POST','GET'])
-@authentication_classes([])
 @permission_classes([])
 def purchase_order_create(request,pk=None):
     if request.method =='POST':
@@ -25,12 +26,12 @@ def purchase_order_create(request,pk=None):
         vendor = Vendor.objects.annotate(num_orders=models.Count('purchaseorders')).order_by('num_orders').first()
         data['vendor'] = vendor.id 
 
-        data['issue_date'] =  datetime.today() 
+        data['issue_date'] =  timezone.localtime(timezone.now())
 
         delivery_date_str = data.get('delivery_date')  # Assuming 'delivery_date' is the field name
-        delivery_date = datetime.strptime(delivery_date_str, '%Y-%m-%d').date()
+        delivery_date = datetime.strptime(delivery_date_str, '%Y-%m-%dT%H:%M:%S.%fZ')
 
-        if delivery_date < datetime.today().date():
+        if delivery_date <= datetime.today():
             return Response({"error": "Delivery date must be equal to or greater than today."}, status=400)
         
         serializer = PurchaseOrderSerializer(data=data)
@@ -54,8 +55,7 @@ def purchase_order_create(request,pk=None):
         return Response(serializer.data,status=200) 
 
 @api_view(['GET','PUT','DELETE'])
-@authentication_classes([])
-@permission_classes([])
+@permission_classes([IsAuthenticated])
 def purchase_order_details(request,pk):
     if request.method == 'GET':
         order = get_object_or_404(PurchaseOrder,id=pk)
@@ -80,13 +80,31 @@ def purchase_order_details(request,pk):
 @permission_classes([IsAuthenticated])
 def purchase_order_acknoweldgement(request,pk):
     user_instance = request.user
+    print(user_instance)
     vendor = get_object_or_404(Vendor,user=user_instance)
     order = get_object_or_404(PurchaseOrder,id=pk,vendor=vendor)
     if not order:
         return Response("Purchase order doesnt exist",status=404)
-    order.acknowledgment_date = datetime.today()
+    if order.status == "completed":
+        return Response("already completed",status=200)
+    order.acknowledgment_date = timezone.localtime(timezone.now())
+    order.status = "completed"
     order.save()
     serializer = PurchaseOrderSerializer(order)
     return Response(serializer.data,status=201)
 
 
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+# def purchase_order_completed(request,pk):
+#     user_instance = request.user
+#     vendor = get_object_or_404(Vendor,user=user_instance)
+#     order = get_object_or_404(PurchaseOrder,id=pk,vendor=vendor)
+#     if not order:
+#         return Response("Purchase order doesnt exist",status=404)
+#     if order.status == "completed":
+#         return Response("already completed",status=200)
+#     else:
+#         order.save()
+#     serializer = PurchaseOrderSerializer(order)
+#     return Response(serializer.data,status=201)
