@@ -35,7 +35,7 @@ This API provides functionality for managing vendors and purchase orders. It sup
 
 ## Setup
 - setup a postgress database
-- put the required info about the databae inside .env inside vendor_base folder
+- put the required info about the database inside .env inside vendor_base folder
 - all dependencies are avaialable in req.text , for setting up environment
 
 ## Endpoints
@@ -121,7 +121,7 @@ Response
   }
 ]
 ```
-### 4.  Update Vendor (PUT api/vendors/id/) - Authentication required , PUT request to this will update vendor details for the vendor id you have provided
+### 4.  Update Vendor (PUT api/vendors/id/) - Authentication required , PUT request to this will update vendor details, for the vendor id you have provided
 
 | parameter  | value |
 | ------------- | ------------- |
@@ -155,7 +155,7 @@ Response
 > [!NOTE]
 > id : 21 - or the id of the vendor you want to update
 
-### 5.  Delete Vendor (DELETE api/vendors/id/) - Authentication required , DELETE request to this will delete vendor for the id you have provided
+### 5.  Delete Vendor (DELETE api/vendors/id/) - Authentication required , DELETE request to this will delete vendor, for the id you have provided
 
 | parameter  | value |
 | ------------- | ------------- |
@@ -250,7 +250,7 @@ Response
 
 ]
 ```
-### 8. List Vendor Purchase Orders (GET api/purchase_orders/id) - Authentication not required , GET to this will list all the purchase orders of the vendor for the id given 
+### 8. List Vendor Purchase Orders (GET api/purchase_orders/id) - Authentication not required , GET to this will list all the purchase orders of the vendor, for the id given 
 
 | parameter  | value |
 | ------------- | ------------- |
@@ -282,7 +282,7 @@ Response
 ]
 ```
 
-### 9. Get Purchase Order Details (GET /purchase_orders/id/) - Authentication required , GET to this will retrieve details of specific purchase order for id given
+### 9. Get Purchase Order Details (GET /purchase_orders/id/) - Authentication required , GET to this will retrieve details of specific purchase order, for id given
 
 | parameter  | value |
 | ------------- | ------------- |
@@ -314,7 +314,7 @@ Response
 
 ```
 
-### 10. Update Purchase Order (PUT api/purchase_orders/id/) - Authentication required , PUT to this will update details of the purchase order for id you given
+### 10. Update Purchase Order (PUT api/purchase_orders/id/) - Authentication required , PUT to this will update details of the purchase order, for id you given
 
 | parameter  | value |
 | ------------- | ------------- |
@@ -359,7 +359,7 @@ Response
 
 ```
 
-### 11. Delete Purchase Order (DELETE api/purchase_orders/id/) - Authentication required , DELETE will delete the purchase order of specific purchase order for the id given
+### 11. Delete Purchase Order (DELETE api/purchase_orders/id/) - Authentication required , DELETE will delete the purchase order of specific purchase order, for the id given
 
 | parameter  | value |
 | ------------- | ------------- |
@@ -371,7 +371,7 @@ Response
 {"Purchase Order deleted successfully"}
 ```
 
-### 12. Acknowledge Purchase Order (POST api/purchase_orders/id/acknowledge) - Authentication required, POST to this will acknowledge and change status of the purchase order to completed , that is the purchase order id, you have provided and this will only be changed to completed if the purchase order is assigned to the vendor your logged in as, and metrics will be calculated.
+### 12. Acknowledge Purchase Order (POST api/purchase_orders/id/acknowledge) - Authentication required, POST to this will acknowledge, and change the status of the purchase order to completed from pending , i.e the purchase order id which have been provided, and this will only be changed to completed, if the purchase order is assigned to the vendor which your logged in as, and metrics will be calculated.
 
 | parameter  | value |
 | ------------- | ------------- |
@@ -407,7 +407,7 @@ Response
 > [!NOTE]
 > An already acknowledged PO cant be acknowledged again
 
-### 13. Get Vendor Performance Metrics (GET api/vendors/id/performance) - authentication required, GET request will fetch the current metrics of vendor and all the historical metrics
+### 13. Get Vendor Performance Metrics (GET api/vendors/id/performance) - authentication required, GET request will fetch the current metrics of vendor and all the historical metrics.
 
 | parameter  | value |
 | ------------- | ------------- |
