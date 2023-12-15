@@ -7,7 +7,7 @@ This API provides functionality for managing vendors and purchase orders. It sup
 - [Authentication](#authentication)
 - [Endpoints](#endpoints)
   - [1. Create Vendor (POST api/vendors/)](#1.-Create-Vendor-(POST-api/vendors/))
-  - [2. List Vendors (GET api/vendors/)](#2-list-vendors-get-vendors)
+  - [2. List Vendors (GET api/vendors/)](#2-list-vendors-get-apivendors---authentication-required-post-request-to-this-will-return-list-of-all-vendors)
   - [3. Retrieve Details of Specific Vendor(GET api/vendors/id/)](#3-Retrieve-vendor-details)
   - [4. Update Vendor (PUT api/vendors/id/)](#3-update-vendor-put-vendors)
   - [5. Delete Vendor (DELETE api/vendors/id/)](#4-delete-vendor-delete-vendors)
