@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view,permission_classes,authentication_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
-from vendor_app.models import CustomUser,Vendor
-from ..serializers.vendor_serializer import VendorSerializer
+from vendor_app.models import CustomUser,Vendor,HistoricalPerformance
+from ..serializers.vendor_serializer import VendorSerializer,MetricsSerializer
 from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -52,7 +52,7 @@ def vendor_create(request,pk=None):
         return vendor_list_and_update(request._request,pk)
     
 
-    
+@swagger_auto_schema(method='PUT',request_body=openapi.Schema(type=openapi.TYPE_OBJECT,properties={'name':openapi.Schema(type=openapi.TYPE_STRING),'contact_details':openapi.Schema(type=openapi.TYPE_STRING),'address':openapi.Schema(type=openapi.TYPE_STRING)}),  consumes=['application/json'],)
 @api_view(['GET','PUT','DELETE'])
 @permission_classes([IsAuthenticated])
 def vendor_list_and_update(request,pk):
@@ -79,3 +79,20 @@ def vendor_list_and_update(request,pk):
         user = vendor.user
         user.delete()
         return Response("Vendor deleted successfully", status=204)
+
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([])
+def vendor_metrics(request,pk):
+    if pk:
+        vendor = get_object_or_404(Vendor,id=pk)
+        serializer = VendorSerializer(vendor)
+        metric_vendor = HistoricalPerformance.objects.filter(vendor=vendor).order_by('date')
+        mertics = MetricsSerializer(metric_vendor,many=True)
+        content ={
+            "current_metrics":serializer.data,
+            "historical metrics": mertics.data
+
+        }
+        return Response(content,status=200)

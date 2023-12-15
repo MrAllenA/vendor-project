@@ -86,7 +86,7 @@ def create_historical_performance(sender,instance,**kwargs):
             vendor = instance.vendor
             HistoricalPerformance.objects.create(vendor=vendor,date=timezone.localtime(timezone.now()),on_time_delivery_rate=vendor.on_time_delivery_rate,quality_rating_avg=vendor.quality_rating_avg,average_response_time=vendor.average_response_time,fullfillment_rate=vendor.fullfillment_rate)
 
-            orders_completed = PurchaseOrder.objects.filter(vendor=vendor,status="completed",delivery_date__lte=Q('acknowledgment_date'))
+            orders_completed = PurchaseOrder.objects.filter(vendor=vendor,status="completed",delivery_date__gte=F('acknowledgment_date'))
             total_orders_completed = PurchaseOrder.objects.filter(vendor=vendor,status="completed")
             print(orders_completed,total_orders_completed)
             on_time_delivery_rate = orders_completed.count() / total_orders_completed.count() if total_orders_completed.count() > 0 else 0.0

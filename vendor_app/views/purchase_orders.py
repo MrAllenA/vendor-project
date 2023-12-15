@@ -24,7 +24,10 @@ def purchase_order_create(request,pk=None):
         data["po_number"] = custom_po_number
         # Set the vendor based on the logic you've used before
         vendor = Vendor.objects.annotate(num_orders=models.Count('purchaseorders')).order_by('num_orders').first()
-        data['vendor'] = vendor.id 
+        if vendor:
+            data['vendor'] = vendor.id 
+        else:
+            return Response("no vendors",status=404)
 
         data['issue_date'] =  timezone.localtime(timezone.now())
 
