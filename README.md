@@ -373,7 +373,7 @@ Response
 
 
 **Response**
-
+```json
 {
   "id": 34,
   "po_number": "poa4fe783c-551c-48db-8876-381590063bd7",
@@ -397,7 +397,7 @@ Response
   "acknowledgment_date": "2023-12-15T22:42:08.457905+05:30",
   "vendor": 21
 }
-
+```
 > [!NOTE]
 > An already acknowledged PO cant be acknowledged again
 
