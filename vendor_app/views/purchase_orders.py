@@ -13,8 +13,10 @@ from django.shortcuts import get_object_or_404
 from django.db import models
 from datetime import datetime
 from django.utils import timezone
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
-
+@swagger_auto_schema(method='POST',request_body=openapi.Schema(type=openapi.TYPE_OBJECT,properties={'delivery_date':openapi.Schema(type=openapi.TYPE_STRING),'items':openapi.Schema(type=openapi.TYPE_ARRAY,items=openapi.Schema(type=openapi.TYPE_OBJECT)),'quantity':openapi.Schema(type=openapi.TYPE_INTEGER),'quality_rating':openapi.Schema(type=openapi.TYPE_INTEGER)}),  consumes=['application/json'],)
 @api_view(['POST','GET'])
 @permission_classes([])
 def purchase_order_create(request,pk=None):
@@ -57,6 +59,7 @@ def purchase_order_create(request,pk=None):
             serializer = PurchaseOrderSerializer(orders,many=True)
         return Response(serializer.data,status=200) 
 
+@swagger_auto_schema(method='PUT',request_body=openapi.Schema(type=openapi.TYPE_OBJECT,properties={'delivery_date':openapi.Schema(type=openapi.TYPE_STRING),'items':openapi.Schema(type=openapi.TYPE_ARRAY,items=openapi.Schema(type=openapi.TYPE_OBJECT)),'quantity':openapi.Schema(type=openapi.TYPE_INTEGER),'quality_rating':openapi.Schema(type=openapi.TYPE_INTEGER)}),  consumes=['application/json'],)
 @api_view(['GET','PUT','DELETE'])
 @permission_classes([IsAuthenticated])
 def purchase_order_details(request,pk):
@@ -77,13 +80,12 @@ def purchase_order_details(request,pk):
     if request.method == 'DELETE':
         order = get_object_or_404(PurchaseOrder, id=pk)
         order.delete()
-        return Response("Purchase Order deleted successfully", status=204)
+        return Response("Purchase Order deleted successfully", status=200)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def purchase_order_acknoweldgement(request,pk):
     user_instance = request.user
-    print(user_instance)
     vendor = get_object_or_404(Vendor,user=user_instance)
     order = get_object_or_404(PurchaseOrder,id=pk,vendor=vendor)
     if not order:

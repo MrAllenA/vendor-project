@@ -78,12 +78,11 @@ def vendor_list_and_update(request,pk):
         vendor = get_object_or_404(Vendor, id=pk)
         user = vendor.user
         user.delete()
-        return Response("Vendor deleted successfully", status=204)
+        return Response("Vendor deleted successfully", status=200)
 
 
 @api_view(['GET'])
-@authentication_classes([])
-@permission_classes([])
+@permission_classes([IsAuthenticated])
 def vendor_metrics(request,pk):
     if pk:
         vendor = get_object_or_404(Vendor,id=pk)
@@ -96,3 +95,5 @@ def vendor_metrics(request,pk):
 
         }
         return Response(content,status=200)
+    else:
+        return Response("no data found",status=400)
