@@ -5,6 +5,7 @@ This API provides functionality for managing vendors and purchase orders. It sup
 ## Table of Contents
 
 - [Authentication](#authentication)
+- [Setup](#setup)
 - [Endpoints](#endpoints)
   - [1. Create Vendor (POST api/vendors/)](#1.-Create-Vendor-(POST-api/vendors/))
   - [2. List Vendors (GET api/vendors/)](#2-list-vendors-get-apivendors---authentication-required-post-request-to-this-will-return-list-of-all-vendors)
@@ -31,6 +32,11 @@ This API provides functionality for managing vendors and purchase orders. It sup
 - ![alt text](https://github.com/MrAllenA/vendor-project/blob/master/authorize.png)
 - input token like this
 - ![alt text](https://github.com/MrAllenA/vendor-project/blob/master/tokenauth.png)
+
+## Setup
+- setup a postgress database
+- put the required info about the databae inside .env inside vendor_base folder
+- all dependencies are avaialable in req.text , for setting up environment
 
 ## Endpoints
 
