@@ -33,7 +33,7 @@ This API provides functionality for managing vendors and purchase orders. It sup
 
 ## Endpoints
 
-### 1. Create Vendor (POST /vendors/) - no authentication required , POST request to this will create vendor
+### 1-Create Vendor (POST /vendors/) - no authentication required , POST request to this will create vendor
 
 Create a new vendor.
 
