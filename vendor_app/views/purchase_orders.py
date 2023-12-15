@@ -16,6 +16,7 @@ from django.utils import timezone
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
+#create purchase order
 @swagger_auto_schema(method='POST',request_body=openapi.Schema(type=openapi.TYPE_OBJECT,properties={'delivery_date':openapi.Schema(type=openapi.TYPE_STRING),'items':openapi.Schema(type=openapi.TYPE_ARRAY,items=openapi.Schema(type=openapi.TYPE_OBJECT)),'quantity':openapi.Schema(type=openapi.TYPE_INTEGER),'quality_rating':openapi.Schema(type=openapi.TYPE_INTEGER)}),  consumes=['application/json'],)
 @api_view(['POST','GET'])
 @permission_classes([])
@@ -48,7 +49,7 @@ def purchase_order_create(request,pk=None):
             serialized_data = PurchaseOrderSerializer(purchase_order_instance).data
 
             return Response(serialized_data,status=201)
-
+# get all orders if pk is not provided or get orders of specific vendor
     if request.method == "GET":
         if pk:
             vendor = get_object_or_404(Vendor, id=pk)
@@ -59,6 +60,7 @@ def purchase_order_create(request,pk=None):
             serializer = PurchaseOrderSerializer(orders,many=True)
         return Response(serializer.data,status=200) 
 
+#get,update,delete specific order for id
 @swagger_auto_schema(method='PUT',request_body=openapi.Schema(type=openapi.TYPE_OBJECT,properties={'delivery_date':openapi.Schema(type=openapi.TYPE_STRING),'items':openapi.Schema(type=openapi.TYPE_ARRAY,items=openapi.Schema(type=openapi.TYPE_OBJECT)),'quantity':openapi.Schema(type=openapi.TYPE_INTEGER),'quality_rating':openapi.Schema(type=openapi.TYPE_INTEGER)}),  consumes=['application/json'],)
 @api_view(['GET','PUT','DELETE'])
 @permission_classes([IsAuthenticated])
@@ -82,6 +84,7 @@ def purchase_order_details(request,pk):
         order.delete()
         return Response("Purchase Order deleted successfully", status=200)
 
+#acknowledge order
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def purchase_order_acknoweldgement(request,pk):

@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-
+#create vendor
 @swagger_auto_schema(method='POST',request_body=openapi.Schema(type=openapi.TYPE_OBJECT,properties={'vendor':openapi.Schema(type=openapi.TYPE_STRING),'contact_details':openapi.Schema(type=openapi.TYPE_STRING),'address':openapi.Schema(type=openapi.TYPE_STRING),},required=['vendor']),  consumes=['application/json'],)
 @api_view(['POST','GET'])
 @authentication_classes([])
@@ -47,11 +47,12 @@ def vendor_create(request,pk=None):
         except Exception as e:
             print(e)
             return Response(status=400)
-    
+        
+    #pass request during get
     if request.method == "GET":
         return vendor_list_and_update(request._request,pk)
     
-
+#get,update,delete vendor specific data when pk is provided or return all vendors if its get and no pk is given
 @swagger_auto_schema(method='PUT',request_body=openapi.Schema(type=openapi.TYPE_OBJECT,properties={'name':openapi.Schema(type=openapi.TYPE_STRING),'contact_details':openapi.Schema(type=openapi.TYPE_STRING),'address':openapi.Schema(type=openapi.TYPE_STRING)}),  consumes=['application/json'],)
 @api_view(['GET','PUT','DELETE'])
 @permission_classes([IsAuthenticated])
@@ -80,7 +81,7 @@ def vendor_list_and_update(request,pk):
         user.delete()
         return Response("Vendor deleted successfully", status=200)
 
-
+#return vendor metrics for specific id
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def vendor_metrics(request,pk):

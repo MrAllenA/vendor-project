@@ -80,7 +80,7 @@ class HistoricalPerformance(models.Model):
     def __str__(self):
         return f"{self.vendor.name} - {self.date}"
     
-
+#calculation of metrics triggered when save called on purchase order where status is changed to completed
 def create_historical_performance(sender,instance,**kwargs):
         if instance.status == "completed":
             vendor = instance.vendor
@@ -112,5 +112,5 @@ def create_historical_performance(sender,instance,**kwargs):
 
 
 
-
+#connector for signal
 post_save.connect(create_historical_performance,sender=PurchaseOrder)
